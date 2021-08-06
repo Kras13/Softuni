@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31410.357
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "01. Scheduling", "01. Scheduling\01. Scheduling.csproj", "{732CCDC8-EF3E-4781-8ABB-F078DEB9AD34}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "02. Garden", "02. Garden\02. Garden.csproj", "{22EC7BFF-4FF7-40F5-81A7-26F9DAEB09CD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{732CCDC8-EF3E-4781-8ABB-F078DEB9AD34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{732CCDC8-EF3E-4781-8ABB-F078DEB9AD34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{732CCDC8-EF3E-4781-8ABB-F078DEB9AD34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{732CCDC8-EF3E-4781-8ABB-F078DEB9AD34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22EC7BFF-4FF7-40F5-81A7-26F9DAEB09CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22EC7BFF-4FF7-40F5-81A7-26F9DAEB09CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22EC7BFF-4FF7-40F5-81A7-26F9DAEB09CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22EC7BFF-4FF7-40F5-81A7-26F9DAEB09CD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3746B71F-0310-4448-8620-682938A61E92}
+	EndGlobalSection
+EndGlobal
