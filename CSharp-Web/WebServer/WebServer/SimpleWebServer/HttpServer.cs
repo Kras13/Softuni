@@ -31,33 +31,36 @@ namespace SimpleWebServer
             while (true)
             {
                 var connection = _serverListener.AcceptTcpClient();
-
                 var networkStream = connection.GetStream();
-                var text = "Hello from the Server!";
 
-                int bytesCount = Encoding.UTF8.GetByteCount(text);
-
-                //                var response =
-                //                    $@"HTTP/1.1 200 OK
-                //Content-Type: text/plain; charset=UTF-8
-                //Content-Length: {bytesCount}
-
-                //{text}";
-
-                string response =
-                    string.Format(
-                        "HTTP/1.1 200 OK \n" +
-                        "Content-Type: text/plain; charset=UTF-8 \n" +
-                        "Content-Length: {0} \n" +
-                        "\n" +
-                        "{1}", bytesCount, text);
-
-                byte[] responeInBytes = Encoding.UTF8.GetBytes(response);
-
-                networkStream.Write(responeInBytes);
+                WriteResponse(networkStream, "Hello from the Server!");
 
                 connection.Close();
             }
+        }
+
+        private void WriteResponse(NetworkStream networkStream, string text)
+        {
+            int bytesCount = Encoding.UTF8.GetByteCount(text);
+
+            //                var response =
+            //                    $@"HTTP/1.1 200 OK
+            //Content-Type: text/plain; charset=UTF-8
+            //Content-Length: {bytesCount}
+
+            //{text}";
+
+            string response =
+                string.Format(
+                    "HTTP/1.1 200 OK \n" +
+                    "Content-Type: text/plain; charset=UTF-8 \n" +
+                    "Content-Length: {0} \n" +
+                    "\n" +
+                    "{1}", bytesCount, text);
+
+            byte[] responeInBytes = Encoding.UTF8.GetBytes(response);
+
+            networkStream.Write(responeInBytes);
         }
     }
 }
