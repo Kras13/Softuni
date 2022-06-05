@@ -30,13 +30,11 @@ namespace _04.Matrix_Shuffling
                     continue;
                 }
 
-                if (command.ToLower() != "swap")
+                if (command != "swap")
                 {
                     Console.WriteLine("Invalid input!");
                     continue;
                 }
-
-
 
                 int originRow = int.Parse(line[1]);
                 int originCol = int.Parse(line[2]);
@@ -58,17 +56,7 @@ namespace _04.Matrix_Shuffling
                 matrix[originRow, originCol] = matrix[newRow, newCol];
                 matrix[newRow, newCol] = tempElement;
 
-                for (int i = 0; i < rows; i++)
-                {
-                    Console.Write(matrix[i, 0]);
-
-                    for (int k = 1; k < cols; k++)
-                    {
-                        Console.Write(" {0}", matrix[i, k]);
-                    }
-
-                    Console.WriteLine();
-                }
+                PrintMatrix(rows, cols, matrix);
             }
         }
 
@@ -100,6 +88,18 @@ namespace _04.Matrix_Shuffling
             }
 
             return matrix;
+        }
+
+        private static void PrintMatrix(int rows, int cols, string[,] matrix)
+        {
+            for (int row = 0; row < rows; row++)
+            {
+                for (int col = 0; col < cols; col++)
+                {
+                    Console.Write(matrix[row, col] + " ");
+                }
+                Console.WriteLine();
+            }
         }
     }
 }
