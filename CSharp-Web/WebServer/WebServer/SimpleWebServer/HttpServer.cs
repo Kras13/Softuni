@@ -1,4 +1,6 @@
-﻿using SimpleWebServer.Tools;
+﻿using SimpleWebServer.Server.HTTP;
+using SimpleWebServer.Tools;
+using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -33,10 +35,33 @@ namespace SimpleWebServer
                 var connection = _serverListener.AcceptTcpClient();
                 var networkStream = connection.GetStream();
 
+                string requestString = ReadRequest(networkStream);
+
+                Console.WriteLine(requestString);
+
+                //Request request = Request.Parse(requestString);
+
                 WriteResponse(networkStream, "Hello from the Server!");
 
                 connection.Close();
             }
+        }
+
+        private string ReadRequest(NetworkStream networkStream)
+        {
+            int bufferLength = 1024;
+            byte[] buffer = new byte[bufferLength];
+
+            StringBuilder sb = new StringBuilder();
+
+            do
+            {
+                int bytesRead = networkStream.Read(buffer, 0, bufferLength);
+                sb.Append(Encoding.UTF8.GetString(buffer, 0, bytesRead));
+
+            } while (networkStream.DataAvailable);
+
+            return sb.ToString();
         }
 
         private void WriteResponse(NetworkStream networkStream, string text)
