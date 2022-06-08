@@ -1,5 +1,4 @@
-﻿using SimpleWebServer.Server.HTTP;
-using SimpleWebServer.Tools;
+﻿using SimpleWebServer.Tools;
 using System;
 using System.Net;
 using System.Net.Sockets;
@@ -37,7 +36,7 @@ namespace SimpleWebServer
 
                 string requestString = ReadRequest(networkStream);
 
-                Console.WriteLine(requestString);
+                _logger.LogLine(requestString);
 
                 //Request request = Request.Parse(requestString);
 
@@ -52,11 +51,21 @@ namespace SimpleWebServer
             int bufferLength = 1024;
             byte[] buffer = new byte[bufferLength];
 
+            int totalBytes = 0;
+
             StringBuilder sb = new StringBuilder();
 
             do
             {
                 int bytesRead = networkStream.Read(buffer, 0, bufferLength);
+
+                totalBytes += bytesRead;
+
+                if (totalBytes > 10 * bufferLength)
+                {
+                    throw new InvalidOperationException("Request too long!");
+                }
+
                 sb.Append(Encoding.UTF8.GetString(buffer, 0, bytesRead));
 
             } while (networkStream.DataAvailable);
