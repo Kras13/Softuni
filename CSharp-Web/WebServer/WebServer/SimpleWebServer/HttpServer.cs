@@ -1,4 +1,6 @@
-﻿using SimpleWebServer.Tools;
+﻿using SimpleWebServer.Server.HTTP;
+using SimpleWebServer.Server.HTTP.Routing;
+using SimpleWebServer.Tools;
 using System;
 using System.Net;
 using System.Net.Sockets;
@@ -13,13 +15,33 @@ namespace SimpleWebServer
         private readonly TcpListener _serverListener;
         private readonly ILogger _logger;
 
-        public HttpServer(string ipAddress, int port, ILogger logger)
+        private readonly RoutingTable routingTable;
+
+        public HttpServer(
+            string ipAddress,
+            int port,
+            ILogger logger,
+            Action<IRoutingTable> routingTableConfiguration)
         {
             this._port = port;
             this._ipAddres = IPAddress.Parse(ipAddress);
             this._logger = logger;
 
             _serverListener = new TcpListener(_ipAddres, port);
+
+            routingTableConfiguration(this.routingTable = new RoutingTable());
+        }
+
+        public HttpServer(int port, ILogger logger, Action<IRoutingTable> routingTable)
+            : this("127.0.0.1", port, logger, routingTable)
+        {
+
+        }
+
+        public HttpServer(ILogger logger, Action<IRoutingTable> routingTable) 
+            : this(8080, logger, routingTable)
+        {
+
         }
 
         public void Start()
@@ -38,9 +60,11 @@ namespace SimpleWebServer
 
                 _logger.LogLine(requestString);
 
-                //Request request = Request.Parse(requestString);
+                Request request = Request.Parse(requestString);
 
-                WriteResponse(networkStream, "Hello from the Server!");
+                Response response = routingTable.MatchRequest(request);
+
+                WriteResponse(networkStream);
 
                 connection.Close();
             }
@@ -73,8 +97,10 @@ namespace SimpleWebServer
             return sb.ToString();
         }
 
-        private void WriteResponse(NetworkStream networkStream, string text)
+        private void WriteResponse(NetworkStream networkStream)
         {
+            string text = "Hello from the server!";
+
             int bytesCount = Encoding.UTF8.GetByteCount(text);
 
             //                var response =

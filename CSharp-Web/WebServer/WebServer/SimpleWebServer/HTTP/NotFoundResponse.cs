@@ -1,6 +1,6 @@
 ﻿namespace SimpleWebServer.Server.HTTP
 {
-    public class NotFoundResponse : ContentResponse
+    public class NotFoundResponse : Response
     {
         public NotFoundResponse() 
             : base(StatusCode.NotFound)

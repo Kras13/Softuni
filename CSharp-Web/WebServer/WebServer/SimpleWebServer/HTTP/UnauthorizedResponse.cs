@@ -1,6 +1,6 @@
 ﻿namespace SimpleWebServer.Server.HTTP
 {
-    public class UnauthorizedResponse : ContentResponse
+    public class UnauthorizedResponse : Response
     {
         public UnauthorizedResponse()
             : base(StatusCode.Unauthorized)

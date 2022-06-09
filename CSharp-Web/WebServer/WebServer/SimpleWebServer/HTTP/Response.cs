@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace SimpleWebServer.Server.HTTP
 {
@@ -17,5 +18,26 @@ namespace SimpleWebServer.Server.HTTP
         public HeaderCollection Headers { get; } = new HeaderCollection();
 
         public string Body { get; set; }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine($"HTTP/1.1 {(int)this.StatusCode} {this.StatusCode}");
+
+            foreach (var header in this.Headers)
+            {
+                sb.AppendLine(header.ToString());
+            }
+
+            sb.AppendLine();
+
+            if (!string.IsNullOrEmpty(this.Body))
+            {
+                sb.Append(this.Body);
+            }
+
+            return sb.ToString();
+        }
     }
 }

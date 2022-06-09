@@ -22,7 +22,8 @@ namespace SimpleWebServer.Server.HTTP
 
         public void Add(string name, string value)
         {
-            this.headers.Add(name, new Header(name, value));
+            headers[name] = new Header(name, value);
+            //this.headers.Add(name, new Header(name, value));
         }
 
         public IEnumerator<Header> GetEnumerator()

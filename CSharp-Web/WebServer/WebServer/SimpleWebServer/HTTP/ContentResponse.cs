@@ -1,4 +1,5 @@
 ﻿using SimpleWebServer.Server.Common;
+using System.Text;
 
 namespace SimpleWebServer.Server.HTTP
 {
@@ -13,6 +14,14 @@ namespace SimpleWebServer.Server.HTTP
             this.Headers.Add(Header.ContentType, contentType);
 
             this.Body = content;
+        }
+
+        public override string ToString()
+        {
+            string contentLength = Encoding.UTF8.GetByteCount(this.Body).ToString();
+            this.Headers.Add(Header.ContentLength, contentLength);
+
+            return base.ToString();
         }
     }
 }
