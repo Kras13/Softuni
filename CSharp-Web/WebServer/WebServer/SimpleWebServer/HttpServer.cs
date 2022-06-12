@@ -64,7 +64,7 @@ namespace SimpleWebServer
 
                 Response response = routingTable.MatchRequest(request);
 
-                WriteResponse(networkStream);
+                WriteResponse(networkStream, response);
 
                 connection.Close();
             }
@@ -97,11 +97,13 @@ namespace SimpleWebServer
             return sb.ToString();
         }
 
-        private void WriteResponse(NetworkStream networkStream)
+        private void WriteResponse(NetworkStream networkStream, Response response)
         {
-            string text = "Hello from the server!";
+            byte[] responseInBytes = Encoding.UTF8.GetBytes(response.ToString());
 
-            int bytesCount = Encoding.UTF8.GetByteCount(text);
+            //string text = "Hello from the server!";
+
+            //int bytesCount = Encoding.UTF8.GetByteCount(text);
 
             //                var response =
             //                    $@"HTTP/1.1 200 OK
@@ -110,17 +112,17 @@ namespace SimpleWebServer
 
             //{text}";
 
-            string response =
-                string.Format(
-                    "HTTP/1.1 200 OK \n" +
-                    "Content-Type: text/plain; charset=UTF-8 \n" +
-                    "Content-Length: {0} \n" +
-                    "\n" +
-                    "{1}", bytesCount, text);
+            //string response =
+            //    string.Format(
+            //        "HTTP/1.1 200 OK \n" +
+            //        "Content-Type: text/plain; charset=UTF-8 \n" +
+            //        "Content-Length: {0} \n" +
+            //        "\n" +
+            //        "{1}", bytesCount, text);
 
-            byte[] responeInBytes = Encoding.UTF8.GetBytes(response);
+            //byte[] responeInBytes = Encoding.UTF8.GetBytes(response);
 
-            networkStream.Write(responeInBytes);
+            networkStream.Write(responseInBytes);
         }
     }
 }

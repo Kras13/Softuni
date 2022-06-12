@@ -18,8 +18,11 @@ namespace SimpleWebServer.Server.HTTP
 
         public override string ToString()
         {
-            string contentLength = Encoding.UTF8.GetByteCount(this.Body).ToString();
-            this.Headers.Add(Header.ContentLength, contentLength);
+            if (this.Body != null)
+            {
+                string contentLength = Encoding.UTF8.GetByteCount(this.Body).ToString();
+                this.Headers.Add(Header.ContentLength, contentLength);
+            }
 
             return base.ToString();
         }
