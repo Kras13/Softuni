@@ -1,4 +1,6 @@
-﻿namespace SimpleWebServer.Server.HTTP
+﻿using SimpleWebServer.Server.HTTP;
+
+namespace SimpleWebServer.Server.Responses
 {
     public class NotFoundResponse : Response
     {
