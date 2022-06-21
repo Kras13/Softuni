@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web;
 
 namespace SimpleWebServer.Server.HTTP
 {
@@ -13,6 +14,8 @@ namespace SimpleWebServer.Server.HTTP
         public HeaderCollection Headers { get; set; }
 
         public string Body { get; set; }
+
+        public IReadOnlyDictionary<string, string> Form { get; private set; }
 
         public static Request Parse(string request)
         {
@@ -28,6 +31,8 @@ namespace SimpleWebServer.Server.HTTP
 
             string body = string.Join("\r\n", bodyLines);
 
+            Dictionary<string, string> form = ParseForm(headers, body);
+
             return new Request()
             {
                 Method = method,
@@ -35,6 +40,38 @@ namespace SimpleWebServer.Server.HTTP
                 Body = body,
                 Headers = headers
             };
+        }
+
+        private static Dictionary<string, string> ParseForm(HeaderCollection headers, string body)
+        {
+            Dictionary<string, string> formCollection = new Dictionary<string, string>();
+
+            if (headers.Contains(Header.ContentType) &&
+                headers[Header.ContentType] == ContentType.FormUrlEncoded)
+            {
+                Dictionary<string, string> parsedResult = ParseFormData(body);
+
+                foreach (var (name, value) in parsedResult)
+                {
+                    formCollection.Add(name, value)
+                }
+            }
+
+            return formCollection;
+        }
+
+        private static Dictionary<string, string> ParseFormData(string bodyLines)
+        {
+            Dictionary<string, string> result = HttpUtility.UrlDecode(bodyLines)
+                .Split('&')
+                .Select(part => part.Split('='))
+                .Where(part => part.Length == 2)
+                .ToDictionary(
+                    part => part[0],
+                    part => part[1],
+                    StringComparer.InvariantCultureIgnoreCase);
+
+            return result;
         }
 
         private static HeaderCollection ParseHeaders(IEnumerable<string> headerLines)

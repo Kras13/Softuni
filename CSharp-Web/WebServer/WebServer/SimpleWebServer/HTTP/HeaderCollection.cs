@@ -12,12 +12,25 @@ namespace SimpleWebServer.Server.HTTP
             this.headers = new Dictionary<string, Header>();
         }
 
-        public int Count 
+        public int Count
         {
             get
             {
                 return this.headers.Count;
-            } 
+            }
+        }
+
+        public string this[string name]
+        {
+            get
+            {
+                return this.headers[name].Value;
+            }
+        }
+
+        public bool Contains(string name)
+        {
+            return this.headers.ContainsKey(name);
         }
 
         public void Add(string name, string value)
