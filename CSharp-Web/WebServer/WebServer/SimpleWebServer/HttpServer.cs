@@ -38,7 +38,7 @@ namespace SimpleWebServer
 
         }
 
-        public HttpServer(ILogger logger, Action<IRoutingTable> routingTable) 
+        public HttpServer(ILogger logger, Action<IRoutingTable> routingTable)
             : this(8080, logger, routingTable)
         {
 
@@ -63,6 +63,11 @@ namespace SimpleWebServer
                 Request request = Request.Parse(requestString);
 
                 Response response = routingTable.MatchRequest(request);
+
+                if (response.PreRenderAction != null)
+                {
+                    response.PreRenderAction(request, response);
+                }
 
                 WriteResponse(networkStream, response);
 

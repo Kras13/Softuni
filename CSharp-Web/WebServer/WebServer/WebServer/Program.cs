@@ -33,7 +33,7 @@ namespace WebServer
             routes
                 .MapGet("/", new TextResponse("Hello from the server!"))
                 .MapGet("/HTML", new HtmlResponse(Program.HtmlForm))
-                .MapPost("/HTML", new TextResponse(""))
+                .MapPost("/HTML", new TextResponse("", Program.AddFormDataAction))
                 .MapGet("/Redirect", new RedirectResponse("https://mobile.bg"));
         }
     }

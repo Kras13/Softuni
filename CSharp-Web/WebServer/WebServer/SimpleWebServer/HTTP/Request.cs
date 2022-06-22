@@ -53,7 +53,7 @@ namespace SimpleWebServer.Server.HTTP
 
                 foreach (var (name, value) in parsedResult)
                 {
-                    formCollection.Add(name, value)
+                    formCollection.Add(name, value);
                 }
             }
 
