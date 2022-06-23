@@ -3,6 +3,7 @@ using SimpleWebServer.Server.HTTP;
 using SimpleWebServer.Server.HTTP.Routing;
 using SimpleWebServer.Server.Responses;
 using System;
+using System.Text;
 
 namespace WebServer
 {
@@ -33,8 +34,23 @@ namespace WebServer
             routes
                 .MapGet("/", new TextResponse("Hello from the server!"))
                 .MapGet("/HTML", new HtmlResponse(Program.HtmlForm))
-                .MapPost("/HTML", new TextResponse("", Program.AddFormDataAction))
+                .MapPost("/HTML", new HtmlResponse("", Program.AddFormDataAction))
                 .MapGet("/Redirect", new RedirectResponse("https://mobile.bg"));
+        }
+
+        private static void AddFormDataAction(Request request, Response response)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.AppendLine("<h1>This is prerendered response action</h1>");
+            sb.AppendLine();
+
+            foreach (var (key, value) in request.Form)
+            {
+                sb.AppendLine($"{key} - {value}");
+            }
+
+            response.Body = sb.ToString();
         }
     }
 }

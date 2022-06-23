@@ -64,6 +64,11 @@ namespace SimpleWebServer
 
                 Response response = routingTable.MatchRequest(request);
 
+                if (response == null)
+                {
+                    continue;
+                }
+
                 if (response.PreRenderAction != null)
                 {
                     response.PreRenderAction(request, response);

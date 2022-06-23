@@ -38,7 +38,8 @@ namespace SimpleWebServer.Server.HTTP
                 Method = method,
                 Url = url,
                 Body = body,
-                Headers = headers
+                Headers = headers,
+                Form = form
             };
         }
 
