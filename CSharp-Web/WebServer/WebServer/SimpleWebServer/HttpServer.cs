@@ -5,6 +5,7 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace SimpleWebServer
 {
@@ -44,7 +45,7 @@ namespace SimpleWebServer
 
         }
 
-        public void Start()
+        public async Task Start()
         {
             _serverListener.Start();
 
@@ -53,10 +54,16 @@ namespace SimpleWebServer
 
             while (true)
             {
-                var connection = _serverListener.AcceptTcpClient();
+                var connection = await _serverListener.AcceptTcpClientAsync();
+
+                Task newTask = Task.Run(async () => 
+                {
+
+                });
+
                 var networkStream = connection.GetStream();
 
-                string requestString = ReadRequest(networkStream);
+                string requestString = await ReadRequest(networkStream);
 
                 _logger.LogLine(requestString);
 
@@ -74,13 +81,13 @@ namespace SimpleWebServer
                     response.PreRenderAction(request, response);
                 }
 
-                WriteResponse(networkStream, response);
+                await WriteResponse(networkStream, response);
 
                 connection.Close();
             }
         }
 
-        private string ReadRequest(NetworkStream networkStream)
+        private async Task<string> ReadRequest(NetworkStream networkStream)
         {
             int bufferLength = 1024;
             byte[] buffer = new byte[bufferLength];
@@ -91,7 +98,8 @@ namespace SimpleWebServer
 
             do
             {
-                int bytesRead = networkStream.Read(buffer, 0, bufferLength);
+                int bytesRead =
+                    await networkStream.ReadAsync(buffer, 0, bufferLength);
 
                 totalBytes += bytesRead;
 
@@ -107,32 +115,11 @@ namespace SimpleWebServer
             return sb.ToString();
         }
 
-        private void WriteResponse(NetworkStream networkStream, Response response)
+        private async Task WriteResponse(NetworkStream networkStream, Response response)
         {
             byte[] responseInBytes = Encoding.UTF8.GetBytes(response.ToString());
 
-            //string text = "Hello from the server!";
-
-            //int bytesCount = Encoding.UTF8.GetByteCount(text);
-
-            //                var response =
-            //                    $@"HTTP/1.1 200 OK
-            //Content-Type: text/plain; charset=UTF-8
-            //Content-Length: {bytesCount}
-
-            //{text}";
-
-            //string response =
-            //    string.Format(
-            //        "HTTP/1.1 200 OK \n" +
-            //        "Content-Type: text/plain; charset=UTF-8 \n" +
-            //        "Content-Length: {0} \n" +
-            //        "\n" +
-            //        "{1}", bytesCount, text);
-
-            //byte[] responeInBytes = Encoding.UTF8.GetBytes(response);
-
-            networkStream.Write(responseInBytes);
+            await networkStream.WriteAsync(responseInBytes);
         }
     }
 }
