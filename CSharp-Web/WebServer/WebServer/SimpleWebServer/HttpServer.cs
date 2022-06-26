@@ -56,10 +56,10 @@ namespace SimpleWebServer
             {
                 var connection = await _serverListener.AcceptTcpClientAsync();
 
-                Task newTask = Task.Run(async () => 
-                {
+                //Task newTask = Task.Run(async () => 
+                //{
 
-                });
+                //});
 
                 var networkStream = connection.GetStream();
 

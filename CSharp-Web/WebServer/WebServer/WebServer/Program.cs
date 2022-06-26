@@ -1,4 +1,5 @@
 ﻿using SimpleWebServer;
+using SimpleWebServer.ConsoleApp;
 using SimpleWebServer.Server.HTTP;
 using SimpleWebServer.Server.HTTP.Routing;
 using SimpleWebServer.Server.Responses;
@@ -30,18 +31,36 @@ namespace WebServer
 
         static async Task Main(string[] args)
         {
-            await DownloadSiteAsTextFile(Program.FileName, new string[] { "https://judge.softuni.org/", "https://softuni.org/" });
+            ConsoleAndFileLogger hybridLogger = InitHybridLogger();
 
-            await Task.Run(async () =>
-           {
-               var server = new HttpServer(
-                _ipAddress,
-                port,
-                new ConsoleLogger(),
-                routes => AddRoutes(routes));
+            try
+            {
+                await DownloadSiteAsTextFile(Program.FileName, new string[] { "https://judge.softuni.org/", "https://softuni.org/" });
 
-               await server.Start();
-           });
+                await Task.Run(async () =>
+                {
+                    var server = new HttpServer(
+                     _ipAddress,
+                     port,
+                     hybridLogger,
+                     routes => AddRoutes(routes));
+
+                    await server.Start();
+                });
+            }
+            finally
+            {
+                hybridLogger.Flush();
+            }
+        }
+
+        private static ConsoleAndFileLogger InitHybridLogger()
+        {
+            ConsoleLogger consoleLogger = new ConsoleLogger();
+
+            FIleLogger fileLogger = new FIleLogger("../../../loggerInfo.txt");
+
+            return new ConsoleAndFileLogger(consoleLogger, fileLogger);
         }
 
         private static void AddRoutes(IRoutingTable routes)
