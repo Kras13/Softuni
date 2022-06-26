@@ -17,28 +17,36 @@ namespace SimpleWebServer.Server.HTTP
 
         public override string ToString()
         {
-            //Task.Run(async () =>
-            //    {
-            //        if (File.Exists(FileName))
-            //        {
-            //            this.Body = await File.ReadAllTextAsync(FileName);
-
-
-            //        }
-            //    });
-
-            if (File.Exists(FileName))
+            Task task = new Task(async () =>
             {
-                this.Body = File.ReadAllTextAsync(FileName).Result;
+                if (File.Exists(FileName))
+                {
+                    this.Body = await File.ReadAllTextAsync(FileName);
+                    long fileBytesCount = new FileInfo(FileName).Length;
+                    this.Headers.Add(Header.ContentLength, fileBytesCount.ToString());
 
-                long fileBytesCount = new FileInfo(FileName).Length;
-                this.Headers.Add(Header.ContentLength, fileBytesCount.ToString());
+                    this.Headers.Add(
+                        Header.ContentDisposition, $"attachment; filename=\"{FileName}\"");
+                }
+            });
 
-                this.Headers.Add(
-                    Header.ContentDisposition, $"attachment; filename=\"{FileName}\"");
-            }
+            task.Start();
+            task.Wait();
 
             return base.ToString();
+
+            //if (File.Exists(FileName))
+            //{
+            //    this.Body = File.ReadAllTextAsync(FileName).Result;
+
+            //    long fileBytesCount = new FileInfo(FileName).Length;
+            //    this.Headers.Add(Header.ContentLength, fileBytesCount.ToString());
+
+            //    this.Headers.Add(
+            //        Header.ContentDisposition, $"attachment; filename=\"{FileName}\"");
+            //}
+
+            //return base.ToString();
         }
     }
 }

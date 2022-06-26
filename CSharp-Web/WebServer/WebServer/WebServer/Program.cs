@@ -25,7 +25,6 @@ namespace WebServer
 
         private const string FileName = "content.txt";
 
-
         private const string _ipAddress = "127.0.0.1";
         private const int port = 8080;
 
