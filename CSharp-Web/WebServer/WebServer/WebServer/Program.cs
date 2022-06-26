@@ -3,6 +3,9 @@ using SimpleWebServer.Server.HTTP;
 using SimpleWebServer.Server.HTTP.Routing;
 using SimpleWebServer.Server.Responses;
 using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,11 +19,20 @@ namespace WebServer
 <input type='submit' value ='Save' />
 </form>";
 
+        private const string DownloadForm = @"<form action='/Content' method='POST'>
+   <input type='submit' value ='Download Sites Content' /> 
+</form>";
+
+        private const string FileName = "content.txt";
+
+
         private const string _ipAddress = "127.0.0.1";
         private const int port = 8080;
 
         static async Task Main(string[] args)
         {
+            await DownloadSiteAsTextFile(Program.FileName, new string[] { "https://judge.softuni.org/", "https://softuni.org/" });
+
             await Task.Run(async () =>
            {
                var server = new HttpServer(
@@ -39,6 +51,8 @@ namespace WebServer
                 .MapGet("/", new TextResponse("Hello from the server!"))
                 .MapGet("/HTML", new HtmlResponse(Program.HtmlForm))
                 .MapPost("/HTML", new HtmlResponse("", Program.AddFormDataAction))
+                .MapGet("/Content", new HtmlResponse(Program.DownloadForm))
+                .MapPost("/Content", new TextFileResponse(Program.FileName))
                 .MapGet("/Redirect", new RedirectResponse("https://mobile.bg"));
         }
 
@@ -55,6 +69,38 @@ namespace WebServer
             }
 
             response.Body = sb.ToString();
+        }
+
+        private static async Task<string> DownloadWebSiteContent(string url)
+        {
+            HttpClient client = new HttpClient();
+
+            using (client)
+            {
+                HttpResponseMessage response = await client.GetAsync(url);
+
+                string html = await response.Content.ReadAsStringAsync();
+
+                return html.Substring(0, 2000);
+            }
+        }
+
+        private static async Task DownloadSiteAsTextFile(string fileName, string[] urls)
+        {
+            List<Task<string>> downloads = new List<Task<string>>();
+
+            foreach (string url in urls)
+            {
+                downloads.Add(DownloadWebSiteContent(url));
+            }
+
+            var responses = await Task.WhenAll(downloads);
+
+            string responsesString = string.Join(
+                Environment.NewLine + 
+                new string('-', 100) + Environment.NewLine, responses);
+
+            await File.WriteAllTextAsync(fileName, responsesString);
         }
     }
 }
