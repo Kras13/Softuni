@@ -15,6 +15,8 @@ namespace SimpleWebServer.Server.HTTP
 
         public string Body { get; set; }
 
+        public CookieCollection Cookies { get; private set; }
+
         public IReadOnlyDictionary<string, string> Form { get; private set; }
 
         public static Request Parse(string request)
@@ -26,6 +28,8 @@ namespace SimpleWebServer.Server.HTTP
             string url = firstLine[1];
 
             HeaderCollection headers = ParseHeaders(lines.Skip(1));
+
+            CookieCollection cookies = ParseCookies(headers);
 
             string[] bodyLines = lines.Skip(headers.Count + 2).ToArray();
 
@@ -39,8 +43,33 @@ namespace SimpleWebServer.Server.HTTP
                 Url = url,
                 Body = body,
                 Headers = headers,
+                Cookies = cookies,
                 Form = form
             };
+        }
+
+        private static CookieCollection ParseCookies(HeaderCollection headers)
+        {
+            CookieCollection cookies = new CookieCollection();
+
+            if (headers.Contains(Header.Cookie))
+            {
+                string cookieHeader = headers[Header.Cookie];
+
+                string[] allCookies = cookieHeader.Split(';');
+
+                foreach (string cookieText in allCookies)
+                {
+                    string[] cookieParts = cookieText.Split('=');
+
+                    string cookieName = cookieParts[0].Trim();
+                    string cookieValue = cookieParts[1].Trim();
+
+                    cookies.Add(cookieName, cookieValue);
+                }
+            }
+
+            return cookies;
         }
 
         private static Dictionary<string, string> ParseForm(HeaderCollection headers, string body)
