@@ -6,9 +6,11 @@ using SimpleWebServer.Server.Responses;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace WebServer
 {
@@ -51,6 +53,41 @@ namespace WebServer
             finally
             {
                 hybridLogger.Flush();
+            }
+        }
+
+        private static void AddCookiesAction(
+            Request request,
+            Response response)
+        {
+            bool requestHasCookies = request.Cookies.Any();
+            string bodyText = "";
+
+            if (requestHasCookies)
+            {
+                StringBuilder cookieText = new StringBuilder();
+                cookieText.AppendLine("<h1>Cookies</h1>");
+
+                cookieText
+                    .Append("<table border='1'><tr><th>Name</th><th>Value</th></tr>");
+
+                foreach (var cookie in request.Cookies)
+                {
+                    cookieText.Append("<tr>");
+                    cookieText.Append($"<td>{HttpUtility.HtmlEncode(cookie.Name)}</td>");
+                    cookieText.Append($"<td>{HttpUtility.HtmlEncode(cookie.Value)}</td>");
+                    cookieText.Append("</tr>");
+                }
+                cookieText.Append("</table>");
+
+                bodyText = cookieText.ToString();
+            }
+            else
+            {
+                bodyText = "<h1>Cookies set!</h1>";
+
+                response.Cookies.Add("My-Cookie", "My-Value");
+                response.Cookies.Add("My-Second-Cookie", "My-Second-Value");
             }
         }
 
@@ -115,7 +152,7 @@ namespace WebServer
             var responses = await Task.WhenAll(downloads);
 
             string responsesString = string.Join(
-                Environment.NewLine + 
+                Environment.NewLine +
                 new string('-', 100) + Environment.NewLine, responses);
 
             await File.WriteAllTextAsync(fileName, responsesString);
