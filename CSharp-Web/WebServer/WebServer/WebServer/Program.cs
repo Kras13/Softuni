@@ -95,15 +95,6 @@ namespace WebServer
             response.Body = bodyText;
         }
 
-        private static ConsoleAndFileLogger InitHybridLogger()
-        {
-            ConsoleLogger consoleLogger = new ConsoleLogger();
-
-            FIleLogger fileLogger = new FIleLogger("../../../loggerInfo.txt");
-
-            return new ConsoleAndFileLogger(consoleLogger, fileLogger);
-        }
-
         private static void AddRoutes(IRoutingTable routes)
         {
             routes
@@ -112,7 +103,17 @@ namespace WebServer
                 .MapPost("/HTML", new HtmlResponse("", Program.AddFormDataAction))
                 .MapGet("/Content", new HtmlResponse(Program.DownloadForm))
                 .MapPost("/Content", new TextFileResponse(Program.FileName))
-                .MapGet("/Redirect", new RedirectResponse("https://mobile.bg"));
+                .MapGet("/Redirect", new RedirectResponse("https://mobile.bg"))
+                .MapGet("/Cookies", new HtmlResponse("", Program.AddCookiesAction));
+        }
+
+        private static ConsoleAndFileLogger InitHybridLogger()
+        {
+            ConsoleLogger consoleLogger = new ConsoleLogger();
+
+            FIleLogger fileLogger = new FIleLogger("../../../loggerInfo.txt");
+
+            return new ConsoleAndFileLogger(consoleLogger, fileLogger);
         }
 
         private static void AddFormDataAction(Request request, Response response)

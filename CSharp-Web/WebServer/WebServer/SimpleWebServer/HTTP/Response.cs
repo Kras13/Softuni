@@ -11,6 +11,8 @@ namespace SimpleWebServer.Server.HTTP
 
             this.Headers.Add(Header.Server, "My Web Server");
             this.Headers.Add(Header.Date, $"{DateTime.UtcNow:R}");
+
+            this.Cookies = new CookieCollection();
         }
 
         public StatusCode StatusCode { get; set; }
