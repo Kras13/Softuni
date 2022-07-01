@@ -35,7 +35,9 @@ namespace WebServer
 
             try
             {
-                await DownloadSiteAsTextFile(Program.FileName, new string[] { "https://judge.softuni.org/", "https://softuni.org/" });
+                //await DownloadSiteAsTextFile(
+                //    Program.FileName,
+                //    new string[] { "https://judge.softuni.org/", "https://softuni.org/" });
 
                 await Task.Run(async () =>
                 {
@@ -50,7 +52,7 @@ namespace WebServer
             }
             finally
             {
-                hybridLogger.Flush();
+                //hybridLogger.Flush();
             }
         }
 

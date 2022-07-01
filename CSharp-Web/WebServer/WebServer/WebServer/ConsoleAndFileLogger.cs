@@ -1,4 +1,5 @@
 ﻿using SimpleWebServer.Tools;
+using System.Threading.Tasks;
 using WebServer;
 
 namespace SimpleWebServer.ConsoleApp
@@ -15,16 +16,16 @@ namespace SimpleWebServer.ConsoleApp
             this.fileLogger = fIleLogger;
         }
 
-        public void Log(string message)
+        public async Task Log(string message)
         {
-            consoleLogger.Log(message);
-            fileLogger.Log(message);
+            await consoleLogger.Log(message);
+            await fileLogger.Log(message);
         }
 
-        public void LogLine(string message)
+        public async Task LogLine(string message)
         {
-            consoleLogger.LogLine(message);
-            fileLogger.LogLine(message);
+            await consoleLogger.LogLine(message);
+            await fileLogger.LogLine(message);
         }
 
         public void Flush()

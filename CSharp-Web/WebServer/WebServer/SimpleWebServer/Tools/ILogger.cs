@@ -1,9 +1,13 @@
-﻿namespace SimpleWebServer.Tools
+﻿using System.Threading.Tasks;
+
+namespace SimpleWebServer.Tools
 {
     public interface ILogger
     {
-        void Log(string message);
+        Task Log(string message);
 
-        void LogLine(string message);
+        Task LogLine(string message);
+
+        void Flush();
     }
 }

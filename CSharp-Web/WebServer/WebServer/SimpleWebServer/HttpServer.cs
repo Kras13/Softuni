@@ -49,8 +49,8 @@ namespace SimpleWebServer
         {
             _serverListener.Start();
 
-            _logger.LogLine(string.Format("Server started on port: {0}", _port));
-            _logger.LogLine("Server listening for requests...");
+            await _logger.LogLine(string.Format("Server started on port: {0}", _port));
+            await _logger.LogLine("Server listening for requests...");
 
             while (true)
             {
@@ -65,7 +65,7 @@ namespace SimpleWebServer
 
                 string requestString = await ReadRequest(networkStream);
 
-                _logger.LogLine(requestString);
+                await _logger.LogLine(requestString);
 
                 Request request = Request.Parse(requestString);
 
@@ -85,6 +85,8 @@ namespace SimpleWebServer
 
                 connection.Close();
             }
+
+            //_logger.Flush();
         }
 
         private async Task<string> ReadRequest(NetworkStream networkStream)

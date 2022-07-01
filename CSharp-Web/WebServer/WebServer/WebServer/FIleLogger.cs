@@ -2,38 +2,58 @@
 using System;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace SimpleWebServer.ConsoleApp
 {
     public class FIleLogger : ILogger
     {
-        private readonly BufferedStream bufferedStream;
+        //private readonly BufferedStream bufferedStream;
+        //private readonly FileStream fileStream;
+        private string filePath;
 
         public FIleLogger(string filePath)
         {
-            FileStream baseStream = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-            this.bufferedStream = new BufferedStream(baseStream);
+            //FileStream baseStream = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            //this.bufferedStream = new BufferedStream(baseStream);
+
+            //this.fileStream = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.Write);
+            this.filePath = filePath;
         }
 
-        public void Log(string message)
+        public async Task Log(string message)
         {
-            byte[] bytesToWrite = Encoding.UTF8.GetBytes(message);
+            //byte[] bytesToWrite = Encoding.UTF8.GetBytes(message);
 
-            bufferedStream.Write(bytesToWrite, 0, bytesToWrite.Length);
+            //await fileStream.WriteAsync(bytesToWrite, 0, bytesToWrite.Length);
+
+            //await File.WriteAllTextAsync(filePath, message);
+
+            using (var fileStream = new FileStream(filePath, FileMode.Append, FileAccess.Write))
+            {
+                byte[] bytesToWrite = Encoding.UTF8.GetBytes(message);
+                byte[] newLine = Encoding.UTF8.GetBytes("\r\n");
+
+                await fileStream.WriteAsync(bytesToWrite, 0, bytesToWrite.Length);
+                await fileStream.WriteAsync(newLine, 0, newLine.Length);
+            }
         }
 
-        public void LogLine(string message)
+        public async Task LogLine(string message)
         {
-            byte[] bytesToWrite = Encoding.UTF8.GetBytes(message);
-            byte[] newLine = Encoding.UTF8.GetBytes("\r\n");
+            using (var fileStream = new FileStream(filePath, FileMode.Append, FileAccess.Write))
+            {
+                byte[] bytesToWrite = Encoding.UTF8.GetBytes(message);
+                byte[] newLine = Encoding.UTF8.GetBytes("\r\n");
 
-            bufferedStream.Write(bytesToWrite, 0, bytesToWrite.Length);
-            bufferedStream.Write(newLine, 0, newLine.Length);
+                await fileStream.WriteAsync(bytesToWrite, 0, bytesToWrite.Length);
+                await fileStream.WriteAsync(newLine, 0, newLine.Length);
+            }
         }
 
         public void Flush()
         {
-            this.bufferedStream.Flush();
+            //this.fileStream.Flush();
         }
     }
 }
