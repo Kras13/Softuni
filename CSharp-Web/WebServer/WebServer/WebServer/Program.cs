@@ -33,29 +33,20 @@ namespace WebServer
 
         static async Task Main(string[] args)
         {
-            ConsoleAndFileLogger hybridLogger = InitHybridLogger();
+            //await DownloadSiteAsTextFile(
+            //    Program.FileName,
+            //    new string[] { "https://judge.softuni.org/", "https://softuni.org/" });
 
-            try
+            await Task.Run(async () =>
             {
-                //await DownloadSiteAsTextFile(
-                //    Program.FileName,
-                //    new string[] { "https://judge.softuni.org/", "https://softuni.org/" });
+                var server = new HttpServer(
+                 _ipAddress,
+                 port,
+                 new ConsoleLogger(),
+                 routes => AddRoutes(routes));
 
-                await Task.Run(async () =>
-                {
-                    var server = new HttpServer(
-                     _ipAddress,
-                     port,
-                     hybridLogger,
-                     routes => AddRoutes(routes));
-
-                    await server.Start();
-                });
-            }
-            finally
-            {
-                //hybridLogger.Flush();
-            }
+                await server.Start();
+            });
         }
 
         private static void AddCookiesAction(
