@@ -35,7 +35,7 @@ namespace SimpleWebServer.Server.HTTP
             }
         }
 
-        public bool Contains(string key)
+        public bool ContainsKey(string key)
         {
             return this.data.ContainsKey(key);
         }

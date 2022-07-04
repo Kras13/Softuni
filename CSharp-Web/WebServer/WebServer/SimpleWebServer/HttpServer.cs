@@ -56,7 +56,7 @@ namespace SimpleWebServer
             {
                 var connection = await _serverListener.AcceptTcpClientAsync();
 
-                //Task newTask = Task.Run(async () => 
+                //Task newTask = Task.Run(async () =>
                 //{
 
                 //});
@@ -81,12 +81,26 @@ namespace SimpleWebServer
                     response.PreRenderAction(request, response);
                 }
 
+                AddSession(request, response);
+
                 await WriteResponse(networkStream, response);
 
                 connection.Close();
             }
+        }
 
-            //_logger.Flush();
+        private void AddSession(Request request, Response response)
+        {
+            bool sessionExists = request.Session
+                .ContainsKey(Session.SessionCurrentDateKey);
+
+            if (!sessionExists)
+            {
+                request.Session[Session.SessionCurrentDateKey] = 
+                    DateTime.Now.ToString();
+                response.Cookies
+                    .Add(Session.SessionCookieName, request.Session.Id);
+            }
         }
 
         private async Task<string> ReadRequest(NetworkStream networkStream)
