@@ -96,7 +96,8 @@ namespace WebServer
                 .MapGet("/Content", new HtmlResponse(Program.DownloadForm))
                 .MapPost("/Content", new TextFileResponse(Program.FileName))
                 .MapGet("/Redirect", new RedirectResponse("https://mobile.bg"))
-                .MapGet("/Cookies", new HtmlResponse("", Program.AddCookiesAction));
+                .MapGet("/Cookies", new HtmlResponse("", Program.AddCookiesAction))
+                .MapGet("/Session", new TextResponse("", Program.DisplaySessionAction));
         }
 
         private static ConsoleAndFileLogger InitHybridLogger()
@@ -121,6 +122,30 @@ namespace WebServer
             }
 
             response.Body = sb.ToString();
+        }
+
+        private static void DisplaySessionAction(
+            Request request, Response response)
+        {
+            bool requestHasSession = request.Session
+                .ContainsKey(Session.SessionCurrentDateKey);
+
+            string bodyText = "";
+
+            if (requestHasSession)
+            {
+                string currentDate = request.Session[Session.SessionCurrentDateKey];
+                bodyText += $"Stored date: {currentDate} \r\n";
+                bodyText += $"Logged {request.Session.LoggedTimes} times \r\n";
+            }
+            else
+            {
+                bodyText += "Current date stored! \r\n";
+                bodyText += $"Logged 1 times \r\n";
+            }
+
+            response.Body = "";
+            response.Body += bodyText;
         }
 
         private static async Task<string> DownloadWebSiteContent(string url)

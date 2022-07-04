@@ -22,6 +22,8 @@ namespace SimpleWebServer.Server.HTTP
 
         public string Id { get; set; }
 
+        public int LoggedTimes { get; set; } = 0;
+
         public string this[string key]
         {
             get

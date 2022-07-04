@@ -35,7 +35,8 @@ namespace SimpleWebServer.Server.HTTP
 
             CookieCollection cookies = ParseCookies(headers);
 
-            Session session = GetSession(cookies);
+            Session session = GetSession(cookies); // if we do not have cookies for current session, new session is created
+            session.LoggedTimes++;
 
             string[] bodyLines = lines.Skip(headers.Count + 2).ToArray(); // first header + the empty header before the body
 
