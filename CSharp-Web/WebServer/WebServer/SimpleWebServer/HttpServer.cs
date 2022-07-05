@@ -54,39 +54,34 @@ namespace SimpleWebServer
 
             while (true)
             {
-                var connection = await _serverListener.AcceptTcpClientAsync();
+                TcpClient tcpClient = await _serverListener.AcceptTcpClientAsync();
 
-                //Task newTask = Task.Run(async () =>
-                //{
-
-                //});
-
-                var networkStream = connection.GetStream();
-
-                string requestString = await ReadRequest(networkStream);
-
-                await _logger.LogLine(requestString);
-
-                Request request = Request.Parse(requestString);
-
-                Response response = routingTable.MatchRequest(request);
-
-                if (response == null)
-                {
-                    continue;
-                }
-
-                if (response.PreRenderAction != null)
-                {
-                    response.PreRenderAction(request, response);
-                }
-
-                AddSession(request, response);
-
-                await WriteResponse(networkStream, response);
-
-                connection.Close();
+                ProcessClientAsync(tcpClient);
             }
+        }
+
+        private async Task ProcessClientAsync(TcpClient tcpClient)
+        {
+            var networkStream = tcpClient.GetStream();
+
+            string requestString = await ReadRequest(networkStream);
+
+            await _logger.LogLine(requestString);
+
+            Request request = Request.Parse(requestString);
+
+            Response response = routingTable.MatchRequest(request);
+
+            if (response.PreRenderAction != null)
+            {
+                response.PreRenderAction(request, response);
+            }
+
+            AddSession(request, response);
+
+            await WriteResponse(networkStream, response);
+
+            tcpClient.Close();
         }
 
         private void AddSession(Request request, Response response)
