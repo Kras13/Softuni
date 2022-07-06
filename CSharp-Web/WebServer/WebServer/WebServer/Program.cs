@@ -16,6 +16,9 @@ namespace WebServer
 {
     class Program
     {
+        private const string _ipAddress = "127.0.0.1";
+        private const int port = 8080;
+
         private const string HtmlForm = @"<form action='/HTML' method='POST'>
    Name: <input type='text' name='Name'/>
    Age: <input type='number' name ='Age'/>
@@ -28,8 +31,14 @@ namespace WebServer
 
         private const string FileName = "content.txt";
 
-        private const string _ipAddress = "127.0.0.1";
-        private const int port = 8080;
+        private const string UserName = "user";
+        private const string UserPass = "user123";
+
+        private const string LoginForm = @"<form action='/Login' method='POST'>
+   Username: <input type='text' name='Username'/>
+   Password: <input type='text' name='Password'/>
+   <input type='submit' value ='Log In' /> 
+</form>";
 
         static async Task Main(string[] args)
         {
@@ -97,7 +106,34 @@ namespace WebServer
                 .MapPost("/Content", new TextFileResponse(Program.FileName))
                 .MapGet("/Redirect", new RedirectResponse("https://mobile.bg"))
                 .MapGet("/Cookies", new HtmlResponse("", Program.AddCookiesAction))
-                .MapGet("/Session", new TextResponse("", Program.DisplaySessionAction));
+                .MapGet("/Session", new TextResponse("", Program.DisplaySessionAction))
+                .MapGet("/Login", new HtmlResponse(Program.LoginForm))
+                .MapPost("/Login", new HtmlResponse("", Program.LoginAction));
+        }
+
+        private static void LoginAction(Request request, Response response)
+        {
+            request.Session.Clear();
+
+            string bodyText = "";
+
+            bool loginAuth =
+                request.Form["Username"] == Program.UserName &&
+                request.Form["Password"] == Program.UserPass;
+
+            if (loginAuth)
+            {
+                request.Session[Session.SessionUserKey] = "MyUserId";
+                response.Cookies.Add(Session.SessionCookieName, request.Session.Id);
+
+                bodyText = "<h3>Logged successfully!</h3>";
+            }
+            else
+            {
+                bodyText = Program.LoginForm;
+            }
+
+            response.Body = bodyText;
         }
 
         private static ConsoleAndFileLogger InitHybridLogger()
