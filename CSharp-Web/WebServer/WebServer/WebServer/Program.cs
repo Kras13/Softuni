@@ -58,6 +58,29 @@ namespace WebServer
             });
         }
 
+        private static void AddRoutes(IRoutingTable routes)
+        {
+            routes
+                .MapGet("/", new TextResponse("Hello from the server!"))
+                .MapGet("/HTML", new HtmlResponse(Program.HtmlForm))
+                .MapPost("/HTML", new HtmlResponse("", Program.AddFormDataAction))
+                .MapGet("/Content", new HtmlResponse(Program.DownloadForm))
+                .MapPost("/Content", new TextFileResponse(Program.FileName))
+                .MapGet("/Redirect", new RedirectResponse("https://mobile.bg"))
+                .MapGet("/Cookies", new HtmlResponse("", Program.AddCookiesAction))
+                .MapGet("/Session", new TextResponse("", Program.DisplaySessionAction))
+                .MapGet("/Login", new HtmlResponse(Program.LoginForm))
+                .MapPost("/Login", new HtmlResponse("", Program.LoginAction))
+                .MapGet("/Logout", new HtmlResponse("", Program.LogOutAction));
+        }
+
+        private static void LogOutAction(Request request, Response response)
+        {
+            request.Session.Clear();
+
+            response.Body = "<h3>Logged out successfully!";
+        }
+
         private static void AddCookiesAction(
             Request request,
             Response response)
@@ -96,24 +119,10 @@ namespace WebServer
             response.Body = bodyText;
         }
 
-        private static void AddRoutes(IRoutingTable routes)
-        {
-            routes
-                .MapGet("/", new TextResponse("Hello from the server!"))
-                .MapGet("/HTML", new HtmlResponse(Program.HtmlForm))
-                .MapPost("/HTML", new HtmlResponse("", Program.AddFormDataAction))
-                .MapGet("/Content", new HtmlResponse(Program.DownloadForm))
-                .MapPost("/Content", new TextFileResponse(Program.FileName))
-                .MapGet("/Redirect", new RedirectResponse("https://mobile.bg"))
-                .MapGet("/Cookies", new HtmlResponse("", Program.AddCookiesAction))
-                .MapGet("/Session", new TextResponse("", Program.DisplaySessionAction))
-                .MapGet("/Login", new HtmlResponse(Program.LoginForm))
-                .MapPost("/Login", new HtmlResponse("", Program.LoginAction));
-        }
-
+        
         private static void LoginAction(Request request, Response response)
         {
-            request.Session.Clear();
+            //request.Session.Clear();
 
             string bodyText = "";
 
