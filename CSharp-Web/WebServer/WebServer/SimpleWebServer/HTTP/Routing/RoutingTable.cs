@@ -7,54 +7,40 @@ namespace SWS.Server.HTTP.Routing
 {
     public class RoutingTable : IRoutingTable
     {
-        private readonly Dictionary<Method, Dictionary<string, Response>> routes;
+        private readonly Dictionary<Method, Dictionary<string, Func<Request, Response>>> routes;
 
         public RoutingTable()
         {
-            this.routes = new Dictionary<Method, Dictionary<string, Response>>()
+            this.routes = new Dictionary<Method, Dictionary<string, Func<Request, Response>>>()
             {
-                [Method.Get] = new Dictionary<string, Response>(),
-                [Method.Post] = new Dictionary<string, Response>(),
-                [Method.Put] = new Dictionary<string, Response>(),
-                [Method.Delete] = new Dictionary<string, Response>()
+                [Method.Get] = new Dictionary<string, Func<Request, Response>>(),
+                [Method.Post] = new Dictionary<string, Func<Request, Response>>(),
+                [Method.Put] = new Dictionary<string, Func<Request, Response>>(),
+                [Method.Delete] = new Dictionary<string, Func<Request, Response>>()
             };
         }
 
-        public IRoutingTable Map(string url, Method method, Response response)
+        public IRoutingTable Map(
+            string path,
+            Method method,
+            Func<Request, Response> responseFunction)
         {
-            switch (method)
-            {
-                case Method.Get:
-                    return this.MapGet(url, response);
-                case Method.Post:
-                    throw new InvalidOperationException($"{method} is not a supported method!");
-                case Method.Put:
-                    throw new InvalidOperationException($"{method} is not a supported method!");
-                case Method.Delete:
-                    throw new InvalidOperationException($"{method} is not a supported method!");
-                default:
-                    throw new InvalidOperationException($"{method} is not a supported method!");
-            }
-        }
+            Guard.AgainstNull(path, nameof(path));
+            Guard.AgainstNull(responseFunction, nameof(responseFunction));
 
-        public IRoutingTable MapGet(string url, Response response)
-        {
-            Guard.AgainstNull(url, nameof(url));
-            Guard.AgainstNull(response, nameof(response));
-
-            this.routes[Method.Get][url] = response;
+            this.routes[method][path] = responseFunction;
 
             return this;
         }
 
-        public IRoutingTable MapPost(string url, Response response)
+        public IRoutingTable MapGet(string path, Func<Request, Response> responseFunction)
         {
-            Guard.AgainstNull(url, nameof(url));
-            Guard.AgainstNull(response, nameof(response));
+            return this.Map(path, Method.Get, responseFunction);
+        }
 
-            this.routes[Method.Post][url] = response;
-
-            return this;
+        public IRoutingTable MapPost(string path, Func<Request, Response> responseFunction)
+        {
+            return this.Map(path, Method.Post, responseFunction);
         }
 
         public Response MatchRequest(Request request)
@@ -68,7 +54,9 @@ namespace SWS.Server.HTTP.Routing
                 return new NotFoundResponse();
             }
 
-            return this.routes[requestMethod][requestUrl];
+            Func<Request, Response> responsFunction = this.routes[requestMethod][requestUrl];
+
+            return responsFunction(request);
         }
     }
 }

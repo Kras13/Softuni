@@ -1,9 +1,11 @@
-﻿namespace SWS.Server.HTTP.Routing
+﻿using System;
+
+namespace SWS.Server.HTTP.Routing
 {
     public interface IRoutingTable
     {
-        IRoutingTable Map(string url, Method method, Response response);
-        IRoutingTable MapGet(string url, Response response);
-        IRoutingTable MapPost(string url, Response response);
+        IRoutingTable Map(string path, Method method, Func<Request, Response> responseFunction); // function that controller should give
+        IRoutingTable MapGet(string path, Func<Request, Response> responseFunction);
+        IRoutingTable MapPost(string path, Func<Request, Response> responseFunction);
     }
 }
