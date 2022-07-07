@@ -1,9 +1,9 @@
-﻿using SimpleWebServer.Server.Common;
-using SimpleWebServer.Server.Responses;
+﻿using SWS.Server.Common;
+using SWS.Server.Responses;
 using System;
 using System.Collections.Generic;
 
-namespace SimpleWebServer.Server.HTTP.Routing
+namespace SWS.Server.HTTP.Routing
 {
     public class RoutingTable : IRoutingTable
     {

@@ -1,6 +1,6 @@
-﻿using SimpleWebServer.Server.Common;
+﻿using SWS.Server.Common;
 
-namespace SimpleWebServer.Server.HTTP
+namespace SWS.Server.HTTP
 {
     public class Cookie
     {

@@ -1,4 +1,4 @@
-﻿namespace SimpleWebServer.Server.HTTP.Routing
+﻿namespace SWS.Server.HTTP.Routing
 {
     public interface IRoutingTable
     {

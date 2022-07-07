@@ -1,8 +1,8 @@
-﻿using SimpleWebServer.Server.Common;
+﻿using SWS.Server.Common;
 using System;
 using System.Text;
 
-namespace SimpleWebServer.Server.HTTP
+namespace SWS.Server.HTTP
 {
     public class ContentResponse : Response
     {

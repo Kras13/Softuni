@@ -1,13 +1,13 @@
-﻿using SimpleWebServer.Server.HTTP;
-using SimpleWebServer.Server.HTTP.Routing;
-using SimpleWebServer.Tools;
+﻿using SWS.Server.HTTP;
+using SWS.Server.HTTP.Routing;
+using SWS.Tools;
 using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimpleWebServer
+namespace SWS
 {
     public class HttpServer
     {

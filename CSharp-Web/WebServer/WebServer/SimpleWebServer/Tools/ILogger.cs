@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace SimpleWebServer.Tools
+namespace SWS.Tools
 {
     public interface ILogger
     {

@@ -1,8 +1,8 @@
-﻿using SimpleWebServer;
-using SimpleWebServer.ConsoleApp;
-using SimpleWebServer.Server.HTTP;
-using SimpleWebServer.Server.HTTP.Routing;
-using SimpleWebServer.Server.Responses;
+﻿using SWS;
+using SWS.ConsoleApp;
+using SWS.Server.HTTP;
+using SWS.Server.HTTP.Routing;
+using SWS.Server.Responses;
 using System;
 using System.Collections.Generic;
 using System.IO;

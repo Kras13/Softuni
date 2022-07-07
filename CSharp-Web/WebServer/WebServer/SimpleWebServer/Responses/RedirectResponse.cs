@@ -1,6 +1,6 @@
-﻿using SimpleWebServer.Server.HTTP;
+﻿using SWS.Server.HTTP;
 
-namespace SimpleWebServer.Server.Responses
+namespace SWS.Server.Responses
 {
     public class RedirectResponse : Response
     {

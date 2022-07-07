@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SimpleWebServer.Server.Common
+namespace SWS.Server.Common
 {
     public static class Guard
     {

@@ -1,7 +1,7 @@
-﻿using SimpleWebServer.Server.Common;
+﻿using SWS.Server.Common;
 using System.Collections.Generic;
 
-namespace SimpleWebServer.Server.HTTP
+namespace SWS.Server.HTTP
 {
     public class Session
     {

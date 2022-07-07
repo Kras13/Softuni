@@ -1,4 +1,4 @@
-﻿namespace SimpleWebServer.Server.HTTP
+﻿namespace SWS.Server.HTTP
 {
     public class ContentType
     {

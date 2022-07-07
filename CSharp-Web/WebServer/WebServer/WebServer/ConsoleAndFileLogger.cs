@@ -1,8 +1,8 @@
-﻿using SimpleWebServer.Tools;
+﻿using SWS.Tools;
 using System.Threading.Tasks;
 using WebServer;
 
-namespace SimpleWebServer.ConsoleApp
+namespace SWS.ConsoleApp
 {
     public class ConsoleAndFileLogger : ILogger
     {

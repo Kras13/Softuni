@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
-namespace SimpleWebServer.Server.HTTP
+namespace SWS.Server.HTTP
 {
     public class HeaderCollection : IEnumerable<Header>
     {

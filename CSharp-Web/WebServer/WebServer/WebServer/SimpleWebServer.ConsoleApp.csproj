@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SimpleWebServer\SimpleWebServer.Server.csproj" />
+    <ProjectReference Include="..\SimpleWebServer\SWS.Server.csproj" />
   </ItemGroup>
 
 </Project>

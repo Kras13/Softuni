@@ -1,4 +1,4 @@
-﻿using SimpleWebServer.Tools;
+﻿using SWS.Tools;
 using System.Threading.Tasks;
 
 namespace WebServer

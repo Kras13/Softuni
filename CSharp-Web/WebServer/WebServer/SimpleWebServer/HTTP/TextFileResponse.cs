@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Threading.Tasks;
 
-namespace SimpleWebServer.Server.HTTP
+namespace SWS.Server.HTTP
 {
     public class TextFileResponse : Response
     {

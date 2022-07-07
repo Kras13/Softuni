@@ -1,10 +1,10 @@
-﻿using SimpleWebServer.Tools;
+﻿using SWS.Tools;
 using System;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SimpleWebServer.ConsoleApp
+namespace SWS.ConsoleApp
 {
     public class FIleLogger : ILogger
     {
