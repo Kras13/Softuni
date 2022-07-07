@@ -1,8 +1,8 @@
 ﻿using SWS;
 using SWS.ConsoleApp;
+using SWS.Framework.Controller;
 using SWS.Server.HTTP;
 using SWS.Server.HTTP.Routing;
-using SWS.Server.Responses;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,6 +11,7 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using SWS.Framework.Routing;
 
 namespace WebServer
 {
@@ -61,17 +62,19 @@ namespace WebServer
         private static void AddRoutes(IRoutingTable routes)
         {
             routes
-                .MapGet("/", new TextResponse("Hello from the server!"))
-                .MapGet("/HTML", new HtmlResponse(Program.HtmlForm))
-                .MapPost("/HTML", new HtmlResponse("", Program.AddFormDataAction))
-                .MapGet("/Content", new HtmlResponse(Program.DownloadForm))
-                .MapPost("/Content", new TextFileResponse(Program.FileName))
-                .MapGet("/Redirect", new RedirectResponse("https://mobile.bg"))
-                .MapGet("/Cookies", new HtmlResponse("", Program.AddCookiesAction))
-                .MapGet("/Session", new TextResponse("", Program.DisplaySessionAction))
-                .MapGet("/Login", new HtmlResponse(Program.LoginForm))
-                .MapPost("/Login", new HtmlResponse("", Program.LoginAction))
-                .MapGet("/Logout", new HtmlResponse("", Program.LogOutAction));
+                .MapGet<HomeController>("/", c => c.Index());
+
+                //.MapGet<HomeController>("/HTML", c => c.Html())
+                //.MapPost<HomeController>("/HTML", c => c.HtmlPost())
+                //.MapGet<HomeController>("/Content", c => c.Content())
+                //.MapPost<HomeController>("/Content", c => c.DownloadContent())
+                //.MapGet<HomeController>("/Cookies", c => c.Cookies())
+                //.MapGet<HomeController>("/Session", c => c.Session());
+
+                //.MapGet<HomeController>("/Redirect", c => c.Redirect())
+                //.MapGet<HomeController>("/Login", c => c.Login())
+                //.MapPost<HomeController>("/Login", c => c.LoginPost())
+                //.MapGet<HomeController>("/Logout", new HtmlResponse("", Program.LogOutAction));
         }
 
         private static void LogOutAction(Request request, Response response)
