@@ -13,6 +13,10 @@ namespace SWS.Framework.Routing
             string path,
             Func<TContoller, Response> controllerFunction) where TContoller : Controller
         {
+            //return routingTable.MapGet(path, ActionFunction);
+
+
+
             return routingTable.MapGet(path, request => controllerFunction(
                 CreateController<TContoller>(request)));
         }
@@ -28,7 +32,9 @@ namespace SWS.Framework.Routing
 
         private static TController CreateController<TController>(Request request)
         {
-            return (TController)Activator.CreateInstance(typeof(TController), new[] { request});
+            return (TController)Activator.CreateInstance(typeof(TController), new[] { request });
         }
     }
+
+    
 }
