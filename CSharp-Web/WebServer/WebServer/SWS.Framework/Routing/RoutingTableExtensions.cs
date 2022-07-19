@@ -50,21 +50,8 @@ namespace SWS.Framework.Routing
             string path,
             Func<TController, Response> controllerFunction) where TController : Controller
         {
-            //return routingTable.MapGet(path, ActionFunction);
-
             return routingTable.MapGet(path, request => controllerFunction(
                 CreateController<TController>(request)));
-        }
-
-        public static IRoutingTable MapGet2<TController>(
-            this IRoutingTable routingTable,
-            string path,
-            Func<Controller, Response> controllerFunction)
-        {
-            //return routingTable.MapGet(path, ActionFunction);
-
-            //return routingTable.MapGet(path, request => controllerFunction(
-            //    CreateController<TController>(request)));
         }
 
         public static IRoutingTable MapPost<TContoller>(

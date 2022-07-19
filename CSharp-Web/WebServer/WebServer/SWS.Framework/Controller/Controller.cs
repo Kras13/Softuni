@@ -35,7 +35,7 @@ namespace SWS.Framework.Controller
         protected Response NotFound()
         {
             return new NotFoundResponse();
-        }
+        }   
 
         protected Response Redirect(string location)
         {

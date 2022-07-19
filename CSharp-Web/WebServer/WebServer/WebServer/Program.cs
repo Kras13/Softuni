@@ -20,16 +20,6 @@ namespace WebServer
         private const string _ipAddress = "127.0.0.1";
         private const int port = 8080;
 
-        private const string HtmlForm = @"<form action='/HTML' method='POST'>
-   Name: <input type='text' name='Name'/>
-   Age: <input type='number' name ='Age'/>
-<input type='submit' value ='Save' />
-</form>";
-
-        private const string DownloadForm = @"<form action='/Content' method='POST'>
-   <input type='submit' value ='Download Sites Content' /> 
-</form>";
-
         private const string FileName = "content.txt";
 
         private const string UserName = "user";
@@ -62,19 +52,24 @@ namespace WebServer
         private static void AddRoutes(IRoutingTable routes)
         {
             routes
-                .MapGet<HomeController>("/", c => c.Index());
+                .MapGet<HomeController>("/", c => c.Index())
+                .MapGet<HomeController>("/Redirect", c => c.Redirect())
+                .MapGet<HomeController>("/HTML", c => c.Html())
+                .MapPost<HomeController>("/HTML", c => c.HtmlFormPost())
+                .MapGet<HomeController>("/Content", c => c.Content())
+                .MapPost<HomeController>("/Content", c => c.DownloadContent());
 
-                //.MapGet<HomeController>("/HTML", c => c.Html())
-                //.MapPost<HomeController>("/HTML", c => c.HtmlPost())
-                //.MapGet<HomeController>("/Content", c => c.Content())
-                //.MapPost<HomeController>("/Content", c => c.DownloadContent())
-                //.MapGet<HomeController>("/Cookies", c => c.Cookies())
-                //.MapGet<HomeController>("/Session", c => c.Session());
+            //.MapGet<HomeController>("/HTML", c => c.Html())
+            //.MapPost<HomeController>("/HTML", c => c.HtmlPost())
+            //.MapGet<HomeController>("/Content", c => c.Content())
+            //.MapPost<HomeController>("/Content", c => c.DownloadContent())
+            //.MapGet<HomeController>("/Cookies", c => c.Cookies())
+            //.MapGet<HomeController>("/Session", c => c.Session());
 
-                //.MapGet<HomeController>("/Redirect", c => c.Redirect())
-                //.MapGet<HomeController>("/Login", c => c.Login())
-                //.MapPost<HomeController>("/Login", c => c.LoginPost())
-                //.MapGet<HomeController>("/Logout", new HtmlResponse("", Program.LogOutAction));
+            //.MapGet<HomeController>("/Redirect", c => c.Redirect())
+            //.MapGet<HomeController>("/Login", c => c.Login())
+            //.MapPost<HomeController>("/Login", c => c.LoginPost())
+            //.MapGet<HomeController>("/Logout", new HtmlResponse("", Program.LogOutAction));
         }
 
         private static void LogOutAction(Request request, Response response)
@@ -122,7 +117,7 @@ namespace WebServer
             response.Body = bodyText;
         }
 
-        
+
         private static void LoginAction(Request request, Response response)
         {
             //request.Session.Clear();
@@ -194,38 +189,6 @@ namespace WebServer
 
             response.Body = "";
             response.Body += bodyText;
-        }
-
-        private static async Task<string> DownloadWebSiteContent(string url)
-        {
-            HttpClient client = new HttpClient();
-
-            using (client)
-            {
-                HttpResponseMessage response = await client.GetAsync(url);
-
-                string html = await response.Content.ReadAsStringAsync();
-
-                return html.Substring(0, 2000);
-            }
-        }
-
-        private static async Task DownloadSiteAsTextFile(string fileName, string[] urls)
-        {
-            List<Task<string>> downloads = new List<Task<string>>();
-
-            foreach (string url in urls)
-            {
-                downloads.Add(DownloadWebSiteContent(url));
-            }
-
-            var responses = await Task.WhenAll(downloads);
-
-            string responsesString = string.Join(
-                Environment.NewLine +
-                new string('-', 100) + Environment.NewLine, responses);
-
-            await File.WriteAllTextAsync(fileName, responsesString);
         }
     }
 }
