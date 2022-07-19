@@ -8,43 +8,6 @@ namespace SWS.Framework.Routing
 
     public static class RoutingTableExtensions
     {
-        class PortClass
-        {
-            private  Response _response;
-            private Controller _controller;
-
-            private Func<Controller, Response> _controllerFunction;
-
-            protected PortClass(
-                Response response, 
-                Controller controller,
-                Func<Controller, Response> controllerFunction)
-            {
-                this._response = response;
-                this._controller = controller;
-                this._controllerFunction = controllerFunction;
-            }
-
-            public void InitController()
-            {
-
-            }
-
-            public Response MainInvokeFunc(Request request)
-            {
-
-                // TODO -> create controller with the request
-                // TODO -> call the givenfunction with the controller
-
-                return _response;
-            }
-
-            private TController CreateController<TController>(Request request)
-            {
-                return (TController)Activator.CreateInstance(typeof(TController), new[] { request });
-            }
-        }
-
         public static IRoutingTable MapGet<TController>(
             this IRoutingTable routingTable,
             string path,
