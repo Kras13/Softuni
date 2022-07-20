@@ -57,19 +57,13 @@ namespace WebServer
                 .MapGet<HomeController>("/HTML", c => c.Html())
                 .MapPost<HomeController>("/HTML", c => c.HtmlFormPost())
                 .MapGet<HomeController>("/Content", c => c.Content())
-                .MapPost<HomeController>("/Content", c => c.DownloadContent());
-
-            //.MapGet<HomeController>("/HTML", c => c.Html())
-            //.MapPost<HomeController>("/HTML", c => c.HtmlPost())
-            //.MapGet<HomeController>("/Content", c => c.Content())
-            //.MapPost<HomeController>("/Content", c => c.DownloadContent())
-            //.MapGet<HomeController>("/Cookies", c => c.Cookies())
-            //.MapGet<HomeController>("/Session", c => c.Session());
-
-            //.MapGet<HomeController>("/Redirect", c => c.Redirect())
-            //.MapGet<HomeController>("/Login", c => c.Login())
-            //.MapPost<HomeController>("/Login", c => c.LoginPost())
-            //.MapGet<HomeController>("/Logout", new HtmlResponse("", Program.LogOutAction));
+                .MapPost<HomeController>("/Content", c => c.DownloadContent())
+                .MapGet<HomeController>("/Cookies", c => c.Cookies())
+                .MapGet<HomeController>("/Session", c => c.Session())
+                .MapGet<HomeController>("/Redirect", c => c.Redirect())
+                .MapGet<HomeController>("/Login", c => c.Login())
+                .MapPost<HomeController>("/Login", c => c.LoginPost())
+                .MapGet<HomeController>("/Logout", c => c.LogOut());
         }
 
         private static void LogOutAction(Request request, Response response)

@@ -23,8 +23,6 @@ namespace SWS.Server.HTTP
 
         public string Body { get; set; }
 
-        public Action<Request, Response> PreRenderAction { get; protected set; }
-
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();

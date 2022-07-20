@@ -58,6 +58,11 @@ namespace SWS.Framework.Controller
             return Html(HomeController.DownloadForm);
         }
 
+        public Response Cookies()
+        {
+            throw new NotImplementedException();
+        }
+
         public Response DownloadContent()
         {
             DownloadSiteAsTextFile(
