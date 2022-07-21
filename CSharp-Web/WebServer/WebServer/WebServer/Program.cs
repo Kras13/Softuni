@@ -56,8 +56,8 @@ namespace WebServer
                 .MapGet<HomeController>("/Session", c => c.Session())
                 .MapGet<HomeController>("/Redirect", c => c.Redirect())
                 .MapGet<UsersController>("/Login", c => c.Login())
-                .MapPost<UsersController>("/Login", c => c.LoginUser());
-                //.MapGet<HomeController>("/Logout", c => c.LogOut());
+                .MapPost<UsersController>("/Login", c => c.LoginUser())
+                .MapGet<UsersController>("/Logout", c => c.LogOut());
         }
 
         private static void AddFormDataAction(Request request, Response response)

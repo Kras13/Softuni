@@ -50,5 +50,19 @@ namespace SWS.Framework.Controller
 
             return base.Redirect("/Login");
         }
+
+        public Response LogOut()
+        {
+            this.Request.Session.Clear();
+
+            return base.Html("<h3>Logged out successfulu!</h3>");
+        }
+
+        public Response GetUserData()
+        {
+            this.Request.Session.Clear();
+
+            return base.Html("<h3>Logged out successfulu!</h3>");
+        }
     }
 }
