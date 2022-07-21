@@ -84,7 +84,7 @@ namespace SWS.Framework.Controller
                     responseBuilder.Append("</tr>");
                 }
 
-                responseBuilder.Append("/table");
+                responseBuilder.Append("</table>");
 
                 return base.Html(responseBuilder.ToString());
             }
@@ -101,12 +101,13 @@ namespace SWS.Framework.Controller
 
         public Response Session()
         {
-            string currentDateKey = "CurrentDate";
-            bool sessionExists = this.Request.Session.ContainsKey(currentDateKey);
+            bool sessionExists = 
+                this.Request.Session.ContainsKey(SWS.Server.HTTP.Session.SessionCurrentDateKey);
 
             if (sessionExists)
             {
-                string currentDate = this.Request.Session[currentDateKey];
+                string currentDate = 
+                    this.Request.Session[SWS.Server.HTTP.Session.SessionCurrentDateKey];
 
                 return base.Text($"Stored date: {currentDate}!");
             }
