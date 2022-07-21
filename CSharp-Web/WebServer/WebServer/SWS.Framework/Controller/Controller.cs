@@ -17,9 +17,19 @@ namespace SWS.Framework.Controller
             return new TextResponse(text);
         }
 
-        protected Response Html(string text)
+        protected Response Html(string text, CookieCollection cookies = null)
         {
-            return new HtmlResponse(text);
+            Response response = new HtmlResponse(text);
+
+            if (cookies != null)
+            {
+                foreach (var cookie in cookies)
+                {
+                    response.Cookies.Add(cookie.Name, cookie.Value);
+                }
+            }
+
+            return response;
         }
 
         protected Response BadRequest()
@@ -35,7 +45,7 @@ namespace SWS.Framework.Controller
         protected Response NotFound()
         {
             return new NotFoundResponse();
-        }   
+        }
 
         protected Response Redirect(string location)
         {

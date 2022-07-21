@@ -1,8 +1,11 @@
 ﻿using SWS.Server.HTTP;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace SWS.Framework.Controller
 {
@@ -60,7 +63,55 @@ namespace SWS.Framework.Controller
 
         public Response Cookies()
         {
-            throw new NotImplementedException();
+            if (this.Request.Cookies.Any(
+                c => c.Name != SWS.Server.HTTP.Session.SessionCookieName))
+            {
+                var responseBuilder = new StringBuilder();
+                responseBuilder.AppendLine("<h1>Cookies</h1>");
+
+                responseBuilder
+                    .Append("<table border='1'><tr><th>Name</th><th>Value</th></tr>");
+
+                foreach (var cookie in this.Request.Cookies)
+                {
+                    responseBuilder.Append("<tr>");
+
+                    responseBuilder
+                        .Append($"<td>{HttpUtility.HtmlEncode(cookie.Name)}</td>");
+                    responseBuilder
+                        .Append($"<td>{HttpUtility.HtmlEncode(cookie.Value)}</td>");
+
+                    responseBuilder.Append("</tr>");
+                }
+
+                responseBuilder.Append("/table");
+
+                return base.Html(responseBuilder.ToString());
+            }
+
+            // if there are not cookies brought in the request then we should add them to request
+
+            CookieCollection cookies = new CookieCollection();
+
+            cookies.Add("My-Cookie", "My-Cookie-Value");
+            cookies.Add("My-Second-Cookie", "My-Second-Cookie-Value");
+
+            return base.Html("<h1>Cookies set!</h1>", cookies);
+        }
+
+        public Response Session()
+        {
+            string currentDateKey = "CurrentDate";
+            bool sessionExists = this.Request.Session.ContainsKey(currentDateKey);
+
+            if (sessionExists)
+            {
+                string currentDate = this.Request.Session[currentDateKey];
+
+                return base.Text($"Stored date: {currentDate}!");
+            }
+
+            return base.Text("Current date stored!");
         }
 
         public Response DownloadContent()
